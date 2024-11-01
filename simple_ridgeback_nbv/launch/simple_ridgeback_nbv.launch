@@ -1,0 +1,26 @@
+<launch>
+  <arg name="arm_id" default="$(optenv RIDGEBACK_FRANKA_MODEL fr3)"/>
+  <arg name="use_gripper" default="true"/>
+  <arg name="paused" default="true"/>
+  <arg name="controller"  default="position_joint_trajectory_controller"     doc="Which example controller should be started? (One of {cartesian_impedance,model,force,joint_position,joint_velocity}_example_controller)" />
+
+  <arg name="initial_joint_positions"
+       doc="Initial joint configuration of the panda. Specify as a list of name/value pairs in form of '-J [name-of-joint] [value-in-rad]'. Default is a 90 degree bend in the elbow"
+       default="-J $(arg arm_id)_joint1 0
+                -J $(arg arm_id)_joint2 0
+                -J $(arg arm_id)_joint3 0
+                -J $(arg arm_id)_joint4 -1.59
+                -J $(arg arm_id)_joint5 0
+                -J $(arg arm_id)_joint6 3.15
+                -J $(arg arm_id)_joint7 0.81" />
+                
+  <arg name="config" default="$(optenv RIDGEBACK_CONFIG base)" />
+  <arg name="parent" default="$(optenv RIDGEBACK_FRANKA_PARENT mid_mount)" />
+
+  <param name="robot_description"
+         command="$(find ridgeback_description)/scripts/env_run
+                  $(find ridgeback_description)/urdf/configs/$(arg config)
+                  $(find xacro)/xacro $(find ridgeback_description)/urdf/ridgeback.urdf.xacro
+                  --inorder " />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+</launch>
