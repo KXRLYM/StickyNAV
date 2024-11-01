@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="superglue-ros" type="run_network.py" name="superglue_network" output="screen"/>
+    <node pkg="superglue-ros" type="transformer.py" name="superglue_transformer" output="screen"/>
+</launch>
