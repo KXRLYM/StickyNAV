@@ -1,0 +1,10 @@
+[submodule "franka_ros"]
+	path = franka_ros
+	url = https://github.com/frankaemika/franka_ros.git
+	branch = noetic-devel
+[submodule "SuperGluePretrainedNetwork"]
+	path = SuperGluePretrainedNetwork
+	url = https://github.com/magicleap/SuperGluePretrainedNetwork.git
+[submodule "octomap_mapping"]
+	path = octomap_mapping
+	url = https://github.com/OctoMap/octomap_mapping.git
