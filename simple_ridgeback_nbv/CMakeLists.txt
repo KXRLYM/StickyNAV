@@ -143,8 +143,7 @@ catkin_package(
 include_directories(
   #include
   ${catkin_INCLUDE_DIRS}
-  /home/karlym/catkin_ws/src/simple_ridgeback_nbv/include
-  /usr/include/jsoncpp
+  /home/rppl/karlym_ws/src/StickyNav/simple_ridgeback_nbv/include
   ${OCTOMAP_INCLUDE_DIRS}
 
 )
