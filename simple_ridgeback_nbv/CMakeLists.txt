@@ -190,7 +190,6 @@ target_link_libraries(${PROJECT_NAME}_ray_caster
 
 target_link_libraries(${PROJECT_NAME}_ransac
   ${catkin_LIBRARIES}
-  jsoncpp
 )
 
 target_link_libraries(${PROJECT_NAME}_map

@@ -16,7 +16,7 @@
                       xyz="0.21 0 0.0">
   </xacro:franka_robot>
 
-  <xacro:include filename="~/karlym_ws/src/urdf/ridgeback_realsense.urdf.xacro" />
+  <xacro:include filename="fridgeback_realsense.urdf.xacro" />
 
   <gazebo>
     <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
