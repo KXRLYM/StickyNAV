@@ -140,13 +140,13 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(
-  #include
-  ${catkin_INCLUDE_DIRS}
-  /home/rppl/karlym_ws/src/StickyNav/simple_ridgeback_nbv/include
-  ${OCTOMAP_INCLUDE_DIRS}
+  include_directories(
+    #include
+    ${catkin_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/include
+    ${OCTOMAP_INCLUDE_DIRS}
 
-)
+  )
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
@@ -168,7 +168,6 @@ add_executable(${PROJECT_NAME}_ray_caster src/ray_casting.cpp src/rrt.cpp)
 add_executable(${PROJECT_NAME}_ransac src/ransac.cpp)
 add_executable(${PROJECT_NAME}_map src/map_node.cpp)
 add_executable(${PROJECT_NAME}_test src/test_node.cpp)
-#add_executable(${PROJECT_NAME}_cluster src/cluster_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -204,9 +203,6 @@ target_link_libraries(${PROJECT_NAME}_test
   ${OCTOMAP_LIBRARIES}
 )
 
-#target_link_libraries(${PROJECT_NAME}_cluster
-#  ${catkin_LIBRARIES}
-#)
 
 #############
 ## Install ##
