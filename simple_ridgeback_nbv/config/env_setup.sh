@@ -7,7 +7,7 @@ WORKSPACE_DIR=~/catkin_ws
 source $WORKSPACE_DIR/devel/setup.bash
 
 # Add SuperGluePretrainedNetwork to the PYTHONPATH
-export PYTHONPATH=$PYTHONPATH:$WORKSPACE_DIR/src/SuperGluePretrainedNetwork
+export PYTHONPATH=$PYTHONPATH:$WORKSPACE_DIR/src/StickyNAV/SuperGluePretrainedNetwork
 
 # Ridgeback extra to put on 
 export RIDGEBACK_URDF_EXTRAS="$WORKSPACE_DIR/src/StickyNAV/simple_ridgeback_nbv/urdf/fridgeback.urdf.xacro"

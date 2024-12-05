@@ -61,6 +61,8 @@
   <depend>moveit_msgs</depend>
   <depend>moveit_visual_tools</depend>
   <depend>moveit_ros_planning_interface</depend>
+  <depend>realsense2_description</depend>
+  <depend>teb_local_planner</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

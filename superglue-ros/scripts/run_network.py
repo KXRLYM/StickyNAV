@@ -56,7 +56,7 @@ class SuperglueNetworkNode:
         # padding the groundtrtuh
 
 
-        self.groundtruth = "/home/karlym/catkin_ws/src/pickup.jpg" # 88 by 130
+        self.groundtruth = "/home/rppl/catkin_ws/src/StickyNAV/simple_ridgeback_nbv/assets/pickup.jpg" # 88 by 130
 
         groundtruth_image = cv2.imread(str(self.groundtruth)) 
         #groundtruth_image = cv2.copyMakeBorder(groundtruth_image, 63, 63, 84, 84, cv2.BORDER_CONSTANT) # for segmented chair

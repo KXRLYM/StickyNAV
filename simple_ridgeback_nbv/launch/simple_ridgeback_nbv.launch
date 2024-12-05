@@ -28,7 +28,7 @@
   <arg name="use_sim_time" default="true" />
   <arg name="gui" default="true" />
   <arg name="headless" default="false" />
-  <arg name="world_name" default="/home/karlym/catkin_ws/src/assets/test_2.world" />
+  <arg name="world_name" default="/home/rppl/catkin_ws/src/StickyNAV/simple_ridgeback_nbv/assets/test_2.world" />
 
   <arg name="x" default="0"/>
   <arg name="y" default="0"/>
