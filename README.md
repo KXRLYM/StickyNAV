@@ -3,5 +3,6 @@ Find and clone four repositories including **fridgeback_arm**, **fridgeback_base
 
 Install the dependencies for ROS Noetic
 ``rosdep install --from-paths src --ignore-src -r -y ``
+
 Install torch:
 ``pip3 install torch``
