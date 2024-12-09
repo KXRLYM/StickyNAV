@@ -596,8 +596,8 @@ void RayCaster::normal_callback(const octomap_msgs::Octomap::ConstPtr& map_msg) 
             goal.target_pose.pose.orientation.w = quaternion.w();
 
             // Send the goal and wait for the result
-            action_client.sendGoal(goal);
-            bool success = action_client.waitForResult(ros::Duration(10.0));
+            //action_client.sendGoal(goal);
+            //bool success = action_client.waitForResult(ros::Duration(10.0));
             break;
         }
         spin_done = true;

@@ -7,7 +7,7 @@
 
   <arg name="initial_joint_positions"
        doc="Initial joint configuration of the panda. Specify as a list of name/value pairs in form of '-J [name-of-joint] [value-in-rad]'. Default is a 90 degree bend in the elbow"
-       default="-J $(arg arm_id)_joint1 0
+       default="-J $(arg arm_id)_joint1 0.0
                 -J $(arg arm_id)_joint2 0
                 -J $(arg arm_id)_joint3 0
                 -J $(arg arm_id)_joint4 -1.59
@@ -28,7 +28,7 @@
   <arg name="use_sim_time" default="true" />
   <arg name="gui" default="true" />
   <arg name="headless" default="false" />
-  <arg name="world_name" default="/home/rppl/catkin_ws/src/StickyNAV/simple_ridgeback_nbv/assets/test_2.world" />
+  <arg name="world_name" default="/home/vscode/stickynav-dev/catkin_ws/src/StickyNAV/simple_ridgeback_nbv/assets/willow.world" />
 
   <arg name="x" default="0"/>
   <arg name="y" default="0"/>

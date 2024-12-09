@@ -33,7 +33,7 @@ class Transformer:
         self.depth_sub = Subscriber('/realsense/depth/color/points', PointCloud2) # depth optical frame
         #self.depth_sub = Subscriber('/octomap_point_cloud_centers', PointCloud2)
 
-        self.sync = TimeSynchronizer([self.pose_array_sub, self.depth_sub], queue_size = 50)
+        self.sync = TimeSynchronizer([self.pose_array_sub, self.depth_sub], queue_size = 1000)
         self.sync.registerCallback(self.syncCallback)
 
         # Publisher for the transformed poses

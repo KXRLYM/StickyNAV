@@ -8,7 +8,7 @@ TebLocalPlannerROS:
  max_samples: 500
  global_plan_overwrite_orientation: True
  allow_init_with_backwards_motion: True
- max_global_plan_lookahead_dist: 10.0
+ max_global_plan_lookahead_dist: 1
  global_plan_viapoint_sep: -1
  global_plan_prune_distance: 1
  exact_arc_length: False
@@ -17,15 +17,15 @@ TebLocalPlannerROS:
     
  # Robot
          
- max_vel_x: 0.4
- max_vel_x_backwards: 0.4
- max_vel_y: 0.4
- max_vel_theta: 0.4
- acc_lim_x: 0.2
- acc_lim_y: 0.2
+ max_vel_x: 0.3
+ max_vel_x_backwards: 0.3
+ max_vel_y: 0.3
+ max_vel_theta: 0.3
+ acc_lim_x: 0.12
+ acc_lim_y: 0.12
  weight_acc_lim_y: 0.0
  weight_kinematics_nh: 0.8
- acc_lim_theta: 0.2
+ acc_lim_theta: 0.12
  min_turning_radius: 0.0 # omni-drive robot (can turn on place!)
 
  footprint_model:
@@ -72,7 +72,7 @@ TebLocalPlannerROS:
  weight_inflation: 0.2
  weight_dynamic_obstacle: 10
  weight_dynamic_obstacle_inflation: 0.2
- weight_viapoint: 1
+ weight_viapoint: 10
  weight_adapt_factor: 2
 
  # Homotopy Class Planner

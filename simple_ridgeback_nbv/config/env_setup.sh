@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define workspace directory as a variable
-WORKSPACE_DIR=~/catkin_ws
+WORKSPACE_DIR=/home/vscode/stickynav-dev/catkin_ws
 
 # Source the workspace setup file
 source $WORKSPACE_DIR/devel/setup.bash
