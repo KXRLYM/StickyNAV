@@ -8,11 +8,11 @@
   <arg name="initial_joint_positions"
        doc="Initial joint configuration of the panda. Specify as a list of name/value pairs in form of '-J [name-of-joint] [value-in-rad]'. Default is a 90 degree bend in the elbow"
        default="-J $(arg arm_id)_joint1 0.0
-                -J $(arg arm_id)_joint2 0
+                -J $(arg arm_id)_joint2 -1.51
                 -J $(arg arm_id)_joint3 0
-                -J $(arg arm_id)_joint4 -1.59
+                -J $(arg arm_id)_joint4 -2.75
                 -J $(arg arm_id)_joint5 0
-                -J $(arg arm_id)_joint6 3.15
+                -J $(arg arm_id)_joint6 2.73
                 -J $(arg arm_id)_joint7 0.81" />
                 
   <arg name="config" default="$(optenv RIDGEBACK_CONFIG base)" />

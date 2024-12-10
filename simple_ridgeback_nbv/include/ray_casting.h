@@ -76,7 +76,7 @@ static constexpr int8_t MAXMIN = 3;
 static constexpr int8_t MAXZ = 4;
 
 static constexpr int MAX_HARDWARE_HEIGHT = 1200; // [mm]
-static constexpr int GLOBAL_OCCUPANCY_COST_MAX = 10;
+static constexpr int GLOBAL_OCCUPANCY_COST_MAX = 50;
 
 #define MAX(a, b) ((a > b ? a : b))
 #define MIN(a, b) ((a > b ? b : a))

@@ -129,16 +129,16 @@ private:
             ROS_INFO("corners %f, %f, %f", pmin.x(), pmin.y(), pmin.z());
             ROS_INFO("corners %f, %f, %f", pmax.x(), pmax.y(), pmax.z());
 
-            float epsilon = 0.001;
+            float epsilon = 0.05;
             octomap::point3d start_point_(0,0,0);
             octomap::point3d start_unknown_point(0,0,0);
             bool isSet(false);
             int at_least_one_occupid(0);
 
             if (cuboid_received_) {
-                for (float x = cube_min.x + epsilon; x < cube_max.x; x += resolution) {
-                    for (float y = cube_min.y + epsilon; y < cube_max.y; y += resolution) {
-                        for (float z = cube_min.z + epsilon; z < cube_max.z; z += resolution) {
+                for (float x = cube_min.x + epsilon; x < cube_max.x - epsilon; x += resolution) {
+                    for (float y = cube_min.y + epsilon; y < cube_max.y - epsilon; y += resolution) {
+                        for (float z = cube_min.z + epsilon; z < cube_max.z - epsilon; z += resolution) {
                             // Perform the search
                             octomap::OcTreeNode* res = octree_temp_->search(x, y, z);
 

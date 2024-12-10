@@ -4,9 +4,6 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
-        - /Status1
-        - /TF1
         - /TF1/Tree1
       Splitter Ratio: 0.5
     Tree Height: 1175
@@ -537,13 +534,13 @@ Visualization Manager:
       Unreliable: false
       Value: true
     - Class: rviz/Marker
-      Enabled: false
+      Enabled: true
       Marker Topic: /match_cuboid
       Name: cube_superglue
       Namespaces:
         {}
       Queue Size: 100
-      Value: false
+      Value: true
     - Class: rviz/MarkerArray
       Enabled: false
       Marker Topic: /occupied_cells_vis_array
@@ -569,7 +566,7 @@ Visualization Manager:
       Marker Topic: /debug_marker
       Name: MarkerArray
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -577,7 +574,7 @@ Visualization Manager:
       Marker Topic: /best_pose
       Name: best pose
       Namespaces:
-        {}
+        best: true
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -609,19 +606,19 @@ Visualization Manager:
       Marker Topic: /rrt_tree
       Name: rrt_tree
       Namespaces:
-        {}
+        rrt_tree: true
       Queue Size: 100
       Value: true
     - Alpha: 0.699999988079071
       Class: rviz/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Map
       Topic: /move_base/global_costmap/costmap
       Unreliable: false
       Use Timestamp: false
-      Value: false
+      Value: true
     - Alpha: 1
       Arrow Length: 0.30000001192092896
       Axes Length: 0.30000001192092896
@@ -675,7 +672,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 8.629130363464355
+      Distance: 2.1305201053619385
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -683,17 +680,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -2.547153949737549
-        Y: 0.483841210603714
-        Z: 6.184463977813721
+        X: -8.43251895904541
+        Y: -6.944965362548828
+        Z: 6.347579479217529
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8097969889640808
+      Pitch: 0.8897966146469116
       Target Frame: <Fixed Frame>
-      Yaw: 3.225827932357788
+      Yaw: 4.410829544067383
     Saved: ~
 Window Geometry:
   Displays:
