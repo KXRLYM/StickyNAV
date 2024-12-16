@@ -1,0 +1,66 @@
+{
+	"name": "ros_noetic_nvidia",
+	"build": {
+	  "dockerfile": "Dockerfile",
+	  "context": "."
+	},
+	"customizations": {
+	  "vscode": {
+		"settings": {
+		  "editor.formatOnSave": true,
+		  "editor.rulers": [100],
+		  "[python]": {
+			"editor.defaultFormatter": "ms-python.black-formatter",
+			"editor.formatOnSave": true
+		  },
+		  "files.associations": {
+			"*.sdf": "xml",
+			"*.world": "xml",
+			"*.xacro": "xml",
+			"*.urdf": "xml",
+			"*.ipp": "cpp"
+		  },
+		  "xml.format.enabled": true,
+		  "xml.format.maxLineWidth": 100,
+		  "xml.format.spaceBeforeEmptyCloseTag": false,
+		  "cSpell.language": "en-AU"
+		},
+		"extensions": [
+		  "ms-azuretools.vscode-docker",
+		  "ms-python.python",
+		  "ms-vscode.cpptools-extension-pack",
+		  "ms-vscode.cpptools",
+		  "ms-vscode.cmake-tools",
+		  "ms-python.black-formatter",
+		  "redhat.vscode-yaml",
+		  "redhat.vscode-xml"
+		]
+	  }
+	},
+	"mounts": [
+	  "type=bind,source=/etc/localtime,destination=/etc/localtime,readonly",
+	  "type=bind,source=/tmp/.X11-unix,destination=/tmp/.X11-unix",
+	  "type=bind,source=${localEnv:XAUTHORITY},destination=/home/vscode/.Xauthority",
+	  "source=/dev,target=/dev,type=bind"
+	],
+	"containerEnv": {
+	  "DISPLAY": "${localEnv:DISPLAY}",
+	  "NVIDIA_DRIVER_CAPABILITIES": "compute,utility,graphics",
+	  "NVIDIA_VISIBLE_DEVICES": "all"
+	},
+	"runArgs": [
+	  "--device", "/dev/dri:/dev/dri",
+	  "--device", "/dev/video0:/dev/video0",
+	  "--network", "host",
+	  "--ipc=host",
+	  "--pid=host",
+	  "--privileged",
+	  "--runtime", "nvidia",
+	  "--gpus", "all"
+	],
+	"remoteUser": "vscode",
+	"workspaceFolder": "/home/vscode/stickynav-dev/catkin_ws",
+	"workspaceMount": "source=${localWorkspaceFolder}/catkin_ws/src/StickyNAV,target=/home/vscode/stickynav-dev/catkin_ws/src/StickyNAV,type=bind",
+	"postCreateCommand": "catkin build" 
+}
+  

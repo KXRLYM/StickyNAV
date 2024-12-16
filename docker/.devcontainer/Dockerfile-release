@@ -1,0 +1,89 @@
+# Stage 1: Build stage
+FROM osrf/ros:noetic-desktop-full AS build-stage
+
+# Set the environment variable to avoid interaction during installation
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Label for the Docker image
+LABEL maintainer="Karlym Nam karlym5@gmail.com"
+
+# Set to root user to install dependencies
+USER root
+
+# Update and install required dependencies (build tools)
+RUN apt-get update \
+    && apt-get upgrade --assume-yes --no-install-recommends \
+    && apt-get install --assume-yes --no-install-recommends \
+    python3-pip \
+    wget \
+    git \
+    python3-catkin-tools \
+    build-essential \
+    cmake \
+    libopencv-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create the catkin workspace directory (for later mounting by devcontainer.json)
+RUN mkdir -p /stickynav-dev/catkin_ws/src
+
+# Set working directory to the catkin workspace
+WORKDIR /stickynav-dev/catkin_ws/src
+
+# Clone the repositories you need inside the catkin_ws/src
+RUN git clone git@github.com:KXRLYM/fridgeback_base_simulator.git \
+    && git clone git@github.com:KXRLYM/fridgeback_base.git \
+    && git clone git@github.com:KXRLYM/fridgeback_arm.git \
+    && git clone git@github.com:KXRLYM/fridgeback_config.git
+
+# Install Python dependencies (optional, based on your requirements.txt)
+COPY requirements.txt /stickynav-dev/catkin_ws/src/
+RUN pip3 install --no-cache-dir -r /stickynav-dev/catkin_ws/src/requirements.txt
+
+# Build the catkin workspace
+WORKDIR /stickynav-dev/catkin_ws
+RUN catkin_make
+
+# Stage 2: Final runtime image
+FROM osrf/ros:noetic-desktop-full AS runtime-stage
+
+# Set to root user to install dependencies
+USER root
+
+# Install only the runtime dependencies (no build tools needed)
+RUN apt-get update \
+    && apt-get install --assume-yes --no-install-recommends \
+    python3-catkin-tools \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up the user that will work in the container
+ARG USERNAME=vscode
+ARG USER_UID=1001
+ARG USER_GID=$USER_UID
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -s /usr/bin/bash --groups video,audio,dialout -m $USERNAME \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+
+USER $USER_UID
+
+# Create the catkin workspace directories in the runtime image
+RUN mkdir -p /stickynav-dev/catkin_ws/src
+
+# Copy only the necessary files from the build stage
+COPY --from=build-stage /stickynav-dev/catkin_ws /stickynav-dev/catkin_ws
+
+# Set up NVIDIA GPU support and other ROS-related environment variables
+ENV __NV_PRIME_RENDER_OFFLOAD=1
+ENV __GLX_VENDOR_LIBRARY_NAME=nvidia
+ENV DISPLAY=${localEnv:DISPLAY}
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics
+ENV NVIDIA_VISIBLE_DEVICES=all
+
+# Ensure ROS environment is sourced when user starts a new shell
+RUN echo '. /opt/ros/noetic/setup.bash' >> ~/.bashrc
+
+# Set working directory to the catkin workspace
+WORKDIR /stickynav-dev/catkin_ws
+
+# Default command to run when container starts
+CMD ["/bin/bash"]

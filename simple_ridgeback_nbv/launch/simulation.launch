@@ -1,0 +1,145 @@
+<launch>
+
+  <arg name="arm_id" default="$(optenv RIDGEBACK_FRANKA_MODEL fr3)"/>
+  <arg name="use_gripper" default="true"/>
+  <arg name="paused" default="true"/>
+  <arg name="controller"  default="position_joint_trajectory_controller"     doc="Which example controller should be started? (One of {cartesian_impedance,model,force,joint_position,joint_velocity}_example_controller)" />
+
+  <arg name="initial_joint_positions"
+       doc="Initial joint configuration of the panda. Specify as a list of name/value pairs in form of '-J [name-of-joint] [value-in-rad]'. Default is a 90 degree bend in the elbow"
+       default="-J $(arg arm_id)_joint1 0.0
+                -J $(arg arm_id)_joint2 -1.51
+                -J $(arg arm_id)_joint3 0
+                -J $(arg arm_id)_joint4 -2.75
+                -J $(arg arm_id)_joint5 0
+                -J $(arg arm_id)_joint6 2.73
+                -J $(arg arm_id)_joint7 0.81" />
+                
+  <arg name="config" default="$(optenv RIDGEBACK_CONFIG base)" />
+  <arg name="parent" default="$(optenv RIDGEBACK_FRANKA_PARENT mid_mount)" />
+
+  <param name="robot_description"
+         command="$(find ridgeback_description)/scripts/env_run
+                  $(find ridgeback_description)/urdf/configs/$(arg config)
+                  $(find xacro)/xacro $(find ridgeback_description)/urdf/ridgeback.urdf.xacro
+                  --inorder " />
+              
+
+  <arg name="use_sim_time" default="true" />
+  <arg name="gui" default="true" />
+  <arg name="headless" default="false" />
+  <arg name="world_name" default="/home/vscode/stickynav-dev/catkin_ws/src/StickyNAV/simple_ridgeback_nbv/assets/willow.world" />
+
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="0"/>
+
+    <!-- Launch Gazebo with the specified world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="0" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    <arg name="headless" value="$(arg headless)" />
+    <arg name="world_name" value="$(arg world_name)" />
+    <arg name="paused" value="true"/>
+  </include>
+  <!-- node name="gazebo_ros" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-urdf -param robot_description -model fridgeback/ridgeback -x $(arg x) -y $(arg y) -z $(arg z) $(arg initial_joint_positions)" /-->
+
+  <arg name="unpause" value="$(eval '' if arg('paused') else '-unpause')" />
+  <node name="model_spawner"
+        pkg="gazebo_ros"
+        type="spawn_model"
+        args="-param robot_description -urdf -model $(arg arm_id) $(arg unpause)
+              $(arg initial_joint_positions) -x $(arg x) -y $(arg y) -z $(arg z)
+              "/>
+
+  <!-- specify the planning pipeline -->
+  <arg name="pipeline" default="ompl" />
+
+  <!-- By default, we are not in debug mode -->
+  <arg name="debug" default="false" />
+
+  <!-- By default, we will load or override the robot_description -->
+  <arg name="load_robot_description" default="true"/>
+
+  <!-- Choose controller manager: fake, simple, or ros_control -->
+  <arg name="moveit_controller_manager" default="ros_control" />
+
+  <!-- Set execution mode for fake execution controllers -->
+  <arg name="fake_execution_type" default="interpolate" />
+
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <remap from="scan" to="front/scan"/>
+  </node>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
+    <rosparam file="$(find simple_ridgeback_nbv)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find simple_ridgeback_nbv)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    
+    <rosparam file="$(find simple_ridgeback_nbv)/params/map_nav_params/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find simple_ridgeback_nbv)/params/map_nav_params/global_costmap_params.yaml" command="load" />
+    
+    <rosparam file="$(find simple_ridgeback_nbv)/params/teb_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find simple_ridgeback_nbv)/params/move_base_params.yaml" command="load" />
+    
+    <param name="base_global_planner" type="string" value="navfn/NavfnROS" />
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
+    <param name="controller_frequency" value="5.0" />
+    <param name="controller_patience" value="15.0" />
+  </node>
+
+  <node name="laser_to_pt" pkg="simple_ridgeback_nbv" type="laser_to_pointcloud.py" output="screen" />
+  <rosparam ns="ridgeback" param="gazebo_ros_control/pid_gains">
+    front_left_wheel:
+      p: 1
+      i: 0.1
+      d: 0
+    front_right_wheel:
+      p: 1
+      i: 0.1
+      d: 0
+    rear_left_wheel:
+      p: 1
+      i: 0.1
+      d: 0
+    rear_right_wheel:
+      p: 1
+      i: 0.1  
+      d: 0
+  </rosparam>
+
+  <rosparam command="load" file="$(find franka_gazebo)/config/franka_hw_sim.yaml" subst_value="true" />
+  <rosparam command="load" file="$(find franka_gazebo)/config/sim_controllers.yaml" subst_value="true" />
+  <rosparam command="load" file="$(find ridgeback_control)/config/control.yaml" />
+
+
+  <param name="m_ee" value="0.76" if="$(arg use_gripper)" />
+
+  <!-- Spawn required ROS controllers -->
+  <node pkg="controller_manager"
+        type="spawner"
+        name="$(arg arm_id)_gripper_spawner"
+        if="$(arg use_gripper)"
+        args="franka_gripper"
+        respawn="false"
+  />
+
+  <!-- spawns the controller after the robot was put into its initial joint pose -->
+  <node pkg="controller_manager"
+        type="spawner"
+        name="$(arg arm_id)_controller_spawner"
+        respawn="false" output="screen"
+        args="--wait-for initialized franka_state_controller $(arg controller)"
+  />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <!--node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" /-->
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find simple_ridgeback_nbv)/rviz/robot.rviz" />
+
+  <!--node name="odom_transform" pkg="simple_ridgeback_nbv" type="odom_transform.py" output="screen" /-->
+
+
+</launch>
